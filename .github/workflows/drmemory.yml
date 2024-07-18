@@ -40,10 +40,10 @@ jobs:
         run: | 
           shopt -s expand_aliases
           alias wget='wget --content-disposition -nc'
-          wget https://github.com/haiwen/libsearpc/archive/refs/tags/v3.3-latest.tar.gz && tar xf libsearpc-3.3-latest.tar.gz -C ./libsearpc-3.3-latest
-          wget https://github.com/haiwen/ccnet-server/archive/refs/tags/v7.0.0-server.tar.gz && tar xf ccnet-server-7.0.0-server.tar.gz -C ./ccnet-server-7.0.0-server
-          wget https://github.com/haiwen/seafile/archive/refs/tags/v9.0.5.tar.gz && tar xf seafile-9.0.5.tar.gz -C ./seafile-9.0.5
-          wget https://github.com/haiwen/seafile-client/archive/refs/tags/v9.0.7.tar.gz && tar xf seafile-client-9.0.7.tar.gz -C ./seafile-client-9.0.7
+          wget https://github.com/haiwen/libsearpc/archive/refs/tags/v3.3-latest.tar.gz && tar xf libsearpc-3.3-latest.tar.gz 
+          wget https://github.com/haiwen/ccnet-server/archive/refs/tags/v7.0.0-server.tar.gz && tar xf ccnet-server-7.0.0-server.tar.gz
+          wget https://github.com/haiwen/seafile/archive/refs/tags/v9.0.5.tar.gz && tar xf seafile-9.0.5.tar.gz
+          wget https://github.com/haiwen/seafile-client/archive/refs/tags/v9.0.7.tar.gz && tar xf seafile-client-9.0.7.tar.gz
           git clone https://github.com/haiwen/libevhtp.git
           git clone https://github.com/haiwen/libsearpc.git
           git clone https://github.com/haiwen/seafile-server.git
@@ -54,7 +54,7 @@ jobs:
           export PREFIX=/usr
           export PKG_CONFIG_PATH="$PREFIX/lib/pkgconfig:$PKG_CONFIG_PATH"
           export PATH="$PREFIX/bin:$PATH"
-          cd libsearpc-3.2-latest
+          cd libsearpc-3.3-latest
           ./autogen.sh && ./configure --prefix=$PREFIX
           sed -i 's/^CC\s*=.*/CC = gcc/' Makefile && sed -i 's/^CXX\s*=.*/CXX = g++/' Makefile && sed -i 's/^CFLAGS\s*=.*/& -g -fno-inline -fno-omit-frame-pointer/' Makefile && sed -i 's/^LDFLAGS\s*=.*/& /' Makefile && sed -i 's/^CPP\s*=.*/CPP = gcc -E/' Makefile
           make && cd ..
