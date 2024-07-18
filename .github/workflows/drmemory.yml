@@ -44,12 +44,6 @@ jobs:
           wget https://github.com/haiwen/ccnet-server/archive/refs/tags/v7.0.0-server.tar.gz && tar xf ccnet-server-7.0.0-server.tar.gz
           wget https://github.com/haiwen/seafile/archive/refs/tags/v9.0.5.tar.gz && tar xf seafile-9.0.5.tar.gz
           wget https://github.com/haiwen/seafile-client/archive/refs/tags/v9.0.7.tar.gz && tar xf seafile-client-9.0.7.tar.gz
-          git clone https://github.com/haiwen/libevhtp.git
-          git clone https://github.com/haiwen/libsearpc.git
-          git clone https://github.com/haiwen/seafile-server.git
-          git clone https://github.com/haiwen/seafevents.git
-          git clone https://github.com/haiwen/seafobj.git
-          git clone https://github.com/haiwen/seahub.git
           export CC=gcc && export CXX=g++ && export CFLAGS="-g -fno-inline -fno-omit-frame-pointer" && export LDFLAGS=""
           export PREFIX=/usr
           export PKG_CONFIG_PATH="$PREFIX/lib/pkgconfig:$PKG_CONFIG_PATH"
@@ -69,6 +63,12 @@ jobs:
           cd seafile-client-9.0.7 && cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$PREFIX .
           sed -i 's/^CC\s*=.*/CC = gcc/' Makefile && sed -i 's/^CXX\s*=.*/CXX = g++/' Makefile && sed -i 's/^CFLAGS\s*=.*/& -g -fno-inline -fno-omit-frame-pointer/' Makefile && sed -i 's/^LDFLAGS\s*=.*/& /' Makefile && sed -i 's/^CPP\s*=.*/CPP = gcc -E/' Makefile
           make && cd ..
+          git clone https://github.com/haiwen/libevhtp.git
+          git clone https://github.com/haiwen/libsearpc.git
+          git clone https://github.com/haiwen/seafile-server.git
+          git clone https://github.com/haiwen/seafevents.git
+          git clone https://github.com/haiwen/seafobj.git
+          git clone https://github.com/haiwen/seahub.git
           cd libevhtp/
           git checkout tags/1.1.7 -b tag-1.1.7
           cd ../libsearpc/
