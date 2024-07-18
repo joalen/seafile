@@ -51,18 +51,18 @@ jobs:
           cd libsearpc-3.3-latest
           ./autogen.sh && ./configure --prefix=$PREFIX
           sed -i 's/^CC\s*=.*/CC = gcc/' Makefile && sed -i 's/^CXX\s*=.*/CXX = g++/' Makefile && sed -i 's/^CFLAGS\s*=.*/& -g -fno-inline -fno-omit-frame-pointer/' Makefile && sed -i 's/^LDFLAGS\s*=.*/& /' Makefile && sed -i 's/^CPP\s*=.*/CPP = gcc -E/' Makefile
-          make && cd ..
+          make && sudo make install && cd ..
           git clone --branch=v4.3.0 https://github.com/warmcat/libwebsockets
           cd libwebsockets && mkdir build && cd build 
           cmake ..
           sed -i 's/^CC\s*=.*/CC = gcc/' Makefile && sed -i 's/^CXX\s*=.*/CXX = g++/' Makefile && sed -i 's/^CFLAGS\s*=.*/& -g -fno-inline -fno-omit-frame-pointer/' Makefile && sed -i 's/^LDFLAGS\s*=.*/& /' Makefile && sed -i 's/^CPP\s*=.*/CPP = gcc -E/' Makefile
-          make && cd ..
+          make && sudo make install && cd ..
           cd seafile-9.0.5 && ./autogen.sh && ./configure --prefix=$PREFIX --disable-fuse
           sed -i 's/^CC\s*=.*/CC = gcc/' Makefile && sed -i 's/^CXX\s*=.*/CXX = g++/' Makefile && sed -i 's/^CFLAGS\s*=.*/& -g -fno-inline -fno-omit-frame-pointer/' Makefile && sed -i 's/^LDFLAGS\s*=.*/& /' Makefile && sed -i 's/^CPP\s*=.*/CPP = gcc -E/' Makefile
-          make && cd ..
+          make && sudo make install && cd ..
           cd seafile-client-9.0.7 && cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$PREFIX .
           sed -i 's/^CC\s*=.*/CC = gcc/' Makefile && sed -i 's/^CXX\s*=.*/CXX = g++/' Makefile && sed -i 's/^CFLAGS\s*=.*/& -g -fno-inline -fno-omit-frame-pointer/' Makefile && sed -i 's/^LDFLAGS\s*=.*/& /' Makefile && sed -i 's/^CPP\s*=.*/CPP = gcc -E/' Makefile
-          make && cd ..
+          make && sudo make install && cd ..
           git clone https://github.com/haiwen/libevhtp.git
           git clone https://github.com/haiwen/libsearpc.git
           git clone https://github.com/haiwen/seafile-server.git
@@ -84,13 +84,13 @@ jobs:
           cd ../libevhtp
           cmake -DEVHTP_DISABLE_SSL=ON -DEVHTP_BUILD_SHARED=OFF .
           sed -i 's/^CC\s*=.*/CC = gcc/' Makefile && sed -i 's/^CXX\s*=.*/CXX = g++/' Makefile && sed -i 's/^CFLAGS\s*=.*/& -g -fno-inline -fno-omit-frame-pointer/' Makefile && sed -i 's/^LDFLAGS\s*=.*/& /' Makefile && sed -i 's/^CPP\s*=.*/CPP = gcc -E/' Makefile
-          make
+          make && make install
           cd ../libsearpc && ./autogen.sh && ./configure
           sed -i 's/^CC\s*=.*/CC = gcc/' Makefile && sed -i 's/^CXX\s*=.*/CXX = g++/' Makefile && sed -i 's/^CFLAGS\s*=.*/& -g -fno-inline -fno-omit-frame-pointer/' Makefile && sed -i 's/^LDFLAGS\s*=.*/& /' Makefile && sed -i 's/^CPP\s*=.*/CPP = gcc -E/' Makefile
-          make
+          make && make install
           cd ../seafile-server && ./autogen.sh && ./configure --disable-fuse
           sed -i 's/^CC\s*=.*/CC = gcc/' Makefile && sed -i 's/^CXX\s*=.*/CXX = g++/' Makefile && sed -i 's/^CFLAGS\s*=.*/& -g -fno-inline -fno-omit-frame-pointer/' Makefile && sed -i 's/^LDFLAGS\s*=.*/& /' Makefile && sed -i 's/^CPP\s*=.*/CPP = gcc -E/' Makefile
-          make
+          make && make install
         continue-on-error: true 
 
       - name: Install Dr. Memory
