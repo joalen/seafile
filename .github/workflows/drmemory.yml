@@ -38,10 +38,11 @@ jobs:
           
       - name: Build repository 
         run: | 
-          wget https://github.com/haiwen/libsearpc/archive/refs/tags/v3.3-latest.tar.gz && tar xf v3.3-latest.tar.gz
-          wget https://github.com/haiwen/seafile/archive/refs/tags/v9.0.7.tar.gz && tar xf v9.0.7.tar.gz
-          wget https://github.com/haiwen/seafile/archive/refs/tags/v9.0.5.tar.gz && tar xf v9.0.5.tar.gz
-          wget https://github.com/haiwen/seafile-client/archive/refs/tags/v9.0.7.tar.gz && tar xf v9.0.7.tar.gz
+          alias wget='wget --content-disposition -nc'
+          wget https://github.com/haiwen/libsearpc/archive/refs/tags/v3.3-latest.tar.gz && tar xf libsearpc-3.3-latest.tar.gz
+          wget https://github.com/haiwen/ccnet-server/archive/refs/tags/v7.0.0-server.tar.gz && tar xf ccnet-server-7.0.0-server.tar.gz
+          wget https://github.com/haiwen/seafile/archive/refs/tags/v9.0.5.tar.gz && tar xf seafile-9.0.5.tar.gz
+          wget https://github.com/haiwen/seafile-client/archive/refs/tags/v9.0.7.tar.gz && tar xf seafile-client-9.0.7.tar.gz
           git clone https://github.com/haiwen/libevhtp.git
           git clone https://github.com/haiwen/libsearpc.git
           git clone https://github.com/haiwen/seafile-server.git
