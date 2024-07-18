@@ -38,6 +38,7 @@ jobs:
           
       - name: Build repository 
         run: | 
+          shopt -s expand_aliases
           alias wget='wget --content-disposition -nc'
           wget https://github.com/haiwen/libsearpc/archive/refs/tags/v3.3-latest.tar.gz && tar xf libsearpc-3.3-latest.tar.gz
           wget https://github.com/haiwen/ccnet-server/archive/refs/tags/v7.0.0-server.tar.gz && tar xf ccnet-server-7.0.0-server.tar.gz
