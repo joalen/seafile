@@ -1,0 +1,165 @@
+name: Run GCOV
+
+on:
+  push:
+
+jobs:
+  run-gcov:
+    name: '${{ matrix.os }}'
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-22.04]
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4 
+        with:
+          ref: 852eb96398b6e127bd3a4eb2a890c7dea47229c1
+
+      - name: Install dependencies for project (Linux)
+        if: runner.os == 'Linux'
+        run: | 
+          sudo apt-get update
+          sudo apt-get install autoconf automake libtool libevent-dev libcurl4-openssl-dev libgtk2.0-dev uuid-dev intltool libsqlite3-dev valac libjansson-dev cmake qtchooser qtbase5-dev libqt5webkit5-dev qttools5-dev qttools5-dev-tools libssl-dev
+          sudo apt-get install -y ssh libevent-dev libcurl4-openssl-dev libglib2.0-dev uuid-dev intltool libsqlite3-dev libmysqlclient-dev libarchive-dev libtool libjansson-dev valac libfuse-dev python3-dateutil cmake re2c flex sqlite3 python3-pip python3-simplejson git libssl-dev libldap2-dev libonig-dev vim vim-scripts wget cmake gcc autoconf automake mysql-client librados-dev libxml2-dev curl sudo telnet netcat unzip netbase ca-certificates apt-transport-https build-essential libxslt1-dev libffi-dev libpcre3-dev libz-dev xz-utils nginx pkg-config poppler-utils libmemcached-dev sudo ldap-utils libldap2-dev libjwt-dev
+          curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | sudo gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg
+          echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_16.x nodistro main" | sudo tee /etc/apt/sources.list.d/nodesource.list
+          sudo apt-get install -y nodejs
+          sudo apt-get install -y python3 python3-dev python3-pip python3-setuptools python3-ldap
+          python3 -m pip install --upgrade pip
+          pip3 install Django==4.2.* django-statici18n==2.3.* django_webpack_loader==1.7.* django_picklefield==3.1 django_formtools==2.4 django_simple_captcha==0.6.* djangosaml2==1.5.* djangorestframework==3.14.* python-dateutil==2.8.* pyjwt==2.6.* pycryptodome==3.16.* python-cas==1.6.* pysaml2==7.2.* requests==2.28.* requests_oauthlib==1.3.* future==0.18.* gunicorn==20.1.* mysqlclient==2.1.* qrcode==7.3.* pillow==10.2.* chardet==5.1.* cffi==1.15.1 captcha==0.5.* openpyxl==3.0.* Markdown==3.4.* bleach==5.0.* python-ldap==3.4.* sqlalchemy==2.0.18 redis mock pytest pymysql configparser pylibmc django-pylibmc nose exam splinter pytest-django
+          sudo apt-get install -y mariadb-server
+          sudo systemctl start mariadb.service
+          sudo mysqladmin -u root password githubactionsrunning2024
+          mysql -uroot -pgithubactionsrunning2024 -e "CREATE DATABASE ccnet CHARACTER SET utf8;"
+          mysql -uroot -pgithubactionsrunning2024 -e "CREATE DATABASE seafile CHARACTER SET utf8;"
+          mysql -uroot -pgithubactionsrunning2024 -e "CREATE DATABASE seahub CHARACTER SET utf8;"
+          
+      - name: Build repository 
+        run: | 
+          shopt -s expand_aliases
+          alias wget='wget --content-disposition -nc'
+          wget https://github.com/haiwen/libsearpc/archive/refs/tags/v3.3-latest.tar.gz && tar xf libsearpc-3.3-latest.tar.gz 
+          wget https://github.com/haiwen/ccnet-server/archive/refs/tags/v7.0.0-server.tar.gz && tar xf ccnet-server-7.0.0-server.tar.gz
+          wget https://github.com/haiwen/seafile/archive/refs/tags/v9.0.5.tar.gz && tar xf seafile-9.0.5.tar.gz
+          wget https://github.com/haiwen/seafile-client/archive/refs/tags/v9.0.7.tar.gz && tar xf seafile-client-9.0.7.tar.gz
+          export CC=gcc
+          export CXX=g++
+          export CFLAGS="-fprofile-arcs -ftest-coverage -fPIC"
+          export LDFLAGS="-fprofile-arcs -ftest-coverage -fPIC"
+          cd libsearpc-3.3-latest
+          ./autogen.sh && ./configure --prefix=$PREFIX
+          sed -i 's/^CC\\s*=.*/CC = gcc/' Makefile
+          sed -i 's/^CXX\\s*=.*/CXX = g++/' Makefile
+          sed -i 's/^CFLAGS\\s*=.*/& -fprofile-arcs -ftest-coverage -fPIC/' Makefile
+          sed -i 's/^LDFLAGS\\s*=.*/& -fprofile-arcs -ftest-coverage -fPIC/' Makefile
+          make && sudo make install && cd ..
+          git clone --branch=v4.3.0 https://github.com/warmcat/libwebsockets
+          cd libwebsockets && mkdir build && cd build 
+          cmake ..
+          sed -i 's/^CC\\s*=.*/CC = gcc/' Makefile
+          sed -i 's/^CXX\\s*=.*/CXX = g++/' Makefile
+          sed -i 's/^CFLAGS\\s*=.*/& -fprofile-arcs -ftest-coverage -fPIC/' Makefile
+          sed -i 's/^LDFLAGS\\s*=.*/& -fprofile-arcs -ftest-coverage -fPIC/' Makefile
+          make && sudo make install && cd ..
+          cd seafile-9.0.5 && ./autogen.sh && ./configure --prefix=$PREFIX --disable-fuse
+          sed -i 's/^CC\\s*=.*/CC = gcc/' Makefile
+          sed -i 's/^CXX\\s*=.*/CXX = g++/' Makefile
+          sed -i 's/^CFLAGS\\s*=.*/& -fprofile-arcs -ftest-coverage -fPIC/' Makefile
+          sed -i 's/^LDFLAGS\\s*=.*/& -fprofile-arcs -ftest-coverage -fPIC/' Makefile
+          make && sudo make install && cd ..
+          cd seafile-client-9.0.7 && cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$PREFIX .
+          sed -i 's/^CC\\s*=.*/CC = gcc/' Makefile
+          sed -i 's/^CXX\\s*=.*/CXX = g++/' Makefile
+          sed -i 's/^CFLAGS\\s*=.*/& -fprofile-arcs -ftest-coverage -fPIC/' Makefile
+          sed -i 's/^LDFLAGS\\s*=.*/& -fprofile-arcs -ftest-coverage -fPIC/' Makefile
+          make && sudo make install && cd ..
+          git clone https://github.com/haiwen/libevhtp.git
+          git clone https://github.com/haiwen/libsearpc.git
+          git clone https://github.com/haiwen/seafile-server.git
+          git clone https://github.com/haiwen/seafevents.git
+          git clone https://github.com/haiwen/seafobj.git
+          git clone https://github.com/haiwen/seahub.git
+          cd libevhtp/
+          git checkout tags/1.1.7 -b tag-1.1.7
+          cd ../libsearpc/
+          git checkout tags/v3.3-latest -b tag-v3.3-latest
+          cd ../seafile-server
+          git checkout tags/v11.0.5-server -b tag-v11.0.5-server
+          cd ../seafevents
+          git checkout tags/v11.0.5-server -b tag-v11.0.5-server
+          cd ../seafobj
+          git checkout tags/v11.0.5-server -b tag-v11.0.5-server
+          cd ../seahub
+          git checkout tags/v11.0.5-server -b tag-v11.0.5-server
+          cd ../libevhtp
+          cmake -DEVHTP_DISABLE_SSL=ON -DEVHTP_BUILD_SHARED=OFF .
+          sed -i 's/^CC\\s*=.*/CC = gcc/' Makefile
+          sed -i 's/^CXX\\s*=.*/CXX = g++/' Makefile
+          sed -i 's/^CFLAGS\\s*=.*/& -fprofile-arcs -ftest-coverage -fPIC/' Makefile
+          sed -i 's/^LDFLAGS\\s*=.*/& -fprofile-arcs -ftest-coverage -fPIC/' Makefile
+          make && sudo make install
+          cd ../libsearpc && ./autogen.sh && ./configure
+          sed -i 's/^CC\\s*=.*/CC = gcc/' Makefile
+          sed -i 's/^CXX\\s*=.*/CXX = g++/' Makefile
+          sed -i 's/^CFLAGS\\s*=.*/& -fprofile-arcs -ftest-coverage -fPIC/' Makefile
+          sed -i 's/^LDFLAGS\\s*=.*/& -fprofile-arcs -ftest-coverage -fPIC/' Makefile
+          make && sudo make install
+          cd ../seafile-server && ./autogen.sh && ./configure --disable-fuse
+          sed -i 's/^CC\\s*=.*/CC = gcc/' Makefile
+          sed -i 's/^CXX\\s*=.*/CXX = g++/' Makefile
+          sed -i 's/^CFLAGS\\s*=.*/& -fprofile-arcs -ftest-coverage -fPIC/' Makefile
+          sed -i 's/^LDFLAGS\\s*=.*/& -fprofile-arcs -ftest-coverage -fPIC/' Makefile
+          make && sudo make install
+        continue-on-error: true 
+           
+      - name: Run GCOV
+        run: |
+          #!/bin/bash
+          set +e 
+
+          mkdir gcovlogs
+          echo "=========[GCOV Service Started!]========="
+
+          DIRECTORY=.
+
+          is_executable() {
+            local file="$1"
+            if file "$file" | grep -q 'ELF 64-bit'; then
+              return 0
+            else
+              return 1
+            fi
+          }
+
+          run_with_gcov() {
+            local executable="$1"
+            output="$("$executable" 2>/dev/null)"  # Suppress stderr
+            local exit_status=$?
+            
+            if [ $exit_status -eq 124 ]; then
+              echo "Command timed out after 10 seconds: $executable"
+              return  # Skip gcov analysis on timeout
+            fi
+            
+            gcov --all-blocks --branch-probabilities --branch-counts --display-progress --function-summaries --json-format -H --use-colors --demangled-names --unconditional-branches --verbose "$executable"
+          }
+
+          find "$DIRECTORY" -type f -executable | while read -r file; do
+            if is_executable "$file"; then
+              run_with_gcov "$file"
+              echo ""
+              echo "" 
+              echo "" 
+            fi
+          done
+
+          find . -name "*.gcov.json.gz" -exec sh -c 'gzip -dc "{}" > "gcovlogs/$(basename "{}" .gz)"' \;
+          echo "=========[GCOV service finished]========="
+  
+      - name: Upload GCOV reports
+        uses: actions/upload-artifact@v4
+        with:
+          name: gcov-report-${{ github.event.repository.name }}-on-${{ matrix.os }}
+          path: './gcovlogs/*'
