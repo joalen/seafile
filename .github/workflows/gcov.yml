@@ -50,30 +50,18 @@ jobs:
           export LDFLAGS="-fprofile-arcs -ftest-coverage -fPIC"
           cd libsearpc-3.3-latest
           ./autogen.sh && ./configure --prefix=$PREFIX
-          sed -i 's/^CC\\s*=.*/CC = gcc/' Makefile
-          sed -i 's/^CXX\\s*=.*/CXX = g++/' Makefile
-          sed -i 's/^CFLAGS\\s*=.*/& -fprofile-arcs -ftest-coverage -fPIC/' Makefile
-          sed -i 's/^LDFLAGS\\s*=.*/& -fprofile-arcs -ftest-coverage -fPIC/' Makefile
+          sed -i 's/^CC\\s*=.*/CC = gcc/' Makefile && sed -i 's/^CXX\\s*=.*/CXX = g++/' Makefile && sed -i 's/^CFLAGS\\s*=.*/& -fprofile-arcs -ftest-coverage -fPIC/' Makefile && sed -i 's/^LDFLAGS\\s*=.*/& -fprofile-arcs -ftest-coverage -fPIC/' Makefile
           make && sudo make install && cd ..
           git clone --branch=v4.3.0 https://github.com/warmcat/libwebsockets
           cd libwebsockets && mkdir build && cd build 
           cmake ..
-          sed -i 's/^CC\\s*=.*/CC = gcc/' Makefile
-          sed -i 's/^CXX\\s*=.*/CXX = g++/' Makefile
-          sed -i 's/^CFLAGS\\s*=.*/& -fprofile-arcs -ftest-coverage -fPIC/' Makefile
-          sed -i 's/^LDFLAGS\\s*=.*/& -fprofile-arcs -ftest-coverage -fPIC/' Makefile
+          sed -i 's/^CC\\s*=.*/CC = gcc/' Makefile && sed -i 's/^CXX\\s*=.*/CXX = g++/' Makefile && sed -i 's/^CFLAGS\\s*=.*/& -fprofile-arcs -ftest-coverage -fPIC/' Makefile && sed -i 's/^LDFLAGS\\s*=.*/& -fprofile-arcs -ftest-coverage -fPIC/' Makefile
           make && sudo make install && cd ..
           cd seafile-9.0.5 && ./autogen.sh && ./configure --prefix=$PREFIX --disable-fuse
-          sed -i 's/^CC\\s*=.*/CC = gcc/' Makefile
-          sed -i 's/^CXX\\s*=.*/CXX = g++/' Makefile
-          sed -i 's/^CFLAGS\\s*=.*/& -fprofile-arcs -ftest-coverage -fPIC/' Makefile
-          sed -i 's/^LDFLAGS\\s*=.*/& -fprofile-arcs -ftest-coverage -fPIC/' Makefile
+          sed -i 's/^CC\\s*=.*/CC = gcc/' Makefile && sed -i 's/^CXX\\s*=.*/CXX = g++/' Makefile && sed -i 's/^CFLAGS\\s*=.*/& -fprofile-arcs -ftest-coverage -fPIC/' Makefile && sed -i 's/^LDFLAGS\\s*=.*/& -fprofile-arcs -ftest-coverage -fPIC/' Makefile
           make && sudo make install && cd ..
           cd seafile-client-9.0.7 && cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$PREFIX .
-          sed -i 's/^CC\\s*=.*/CC = gcc/' Makefile
-          sed -i 's/^CXX\\s*=.*/CXX = g++/' Makefile
-          sed -i 's/^CFLAGS\\s*=.*/& -fprofile-arcs -ftest-coverage -fPIC/' Makefile
-          sed -i 's/^LDFLAGS\\s*=.*/& -fprofile-arcs -ftest-coverage -fPIC/' Makefile
+          sed -i 's/^CC\\s*=.*/CC = gcc/' Makefile && sed -i 's/^CXX\\s*=.*/CXX = g++/' Makefile && sed -i 's/^CFLAGS\\s*=.*/& -fprofile-arcs -ftest-coverage -fPIC/' Makefile && sed -i 's/^LDFLAGS\\s*=.*/& -fprofile-arcs -ftest-coverage -fPIC/' Makefile
           make && sudo make install && cd ..
           git clone https://github.com/haiwen/libevhtp.git
           git clone https://github.com/haiwen/libsearpc.git
@@ -95,22 +83,13 @@ jobs:
           git checkout tags/v11.0.5-server -b tag-v11.0.5-server
           cd ../libevhtp
           cmake -DEVHTP_DISABLE_SSL=ON -DEVHTP_BUILD_SHARED=OFF .
-          sed -i 's/^CC\\s*=.*/CC = gcc/' Makefile
-          sed -i 's/^CXX\\s*=.*/CXX = g++/' Makefile
-          sed -i 's/^CFLAGS\\s*=.*/& -fprofile-arcs -ftest-coverage -fPIC/' Makefile
-          sed -i 's/^LDFLAGS\\s*=.*/& -fprofile-arcs -ftest-coverage -fPIC/' Makefile
+          sed -i 's/^CC\\s*=.*/CC = gcc/' Makefile && sed -i 's/^CXX\\s*=.*/CXX = g++/' Makefile && sed -i 's/^CFLAGS\\s*=.*/& -fprofile-arcs -ftest-coverage -fPIC/' Makefile && sed -i 's/^LDFLAGS\\s*=.*/& -fprofile-arcs -ftest-coverage -fPIC/' Makefile
           make && sudo make install
           cd ../libsearpc && ./autogen.sh && ./configure
-          sed -i 's/^CC\\s*=.*/CC = gcc/' Makefile
-          sed -i 's/^CXX\\s*=.*/CXX = g++/' Makefile
-          sed -i 's/^CFLAGS\\s*=.*/& -fprofile-arcs -ftest-coverage -fPIC/' Makefile
-          sed -i 's/^LDFLAGS\\s*=.*/& -fprofile-arcs -ftest-coverage -fPIC/' Makefile
+          sed -i 's/^CC\\s*=.*/CC = gcc/' Makefile && sed -i 's/^CXX\\s*=.*/CXX = g++/' Makefile && sed -i 's/^CFLAGS\\s*=.*/& -fprofile-arcs -ftest-coverage -fPIC/' Makefile && sed -i 's/^LDFLAGS\\s*=.*/& -fprofile-arcs -ftest-coverage -fPIC/' Makefile
           make && sudo make install
           cd ../seafile-server && ./autogen.sh && ./configure --disable-fuse
-          sed -i 's/^CC\\s*=.*/CC = gcc/' Makefile
-          sed -i 's/^CXX\\s*=.*/CXX = g++/' Makefile
-          sed -i 's/^CFLAGS\\s*=.*/& -fprofile-arcs -ftest-coverage -fPIC/' Makefile
-          sed -i 's/^LDFLAGS\\s*=.*/& -fprofile-arcs -ftest-coverage -fPIC/' Makefile
+          sed -i 's/^CC\\s*=.*/CC = gcc/' Makefile && sed -i 's/^CXX\\s*=.*/CXX = g++/' Makefile && sed -i 's/^CFLAGS\\s*=.*/& -fprofile-arcs -ftest-coverage -fPIC/' Makefile && sed -i 's/^LDFLAGS\\s*=.*/& -fprofile-arcs -ftest-coverage -fPIC/' Makefile
           make && sudo make install
         continue-on-error: true 
            
